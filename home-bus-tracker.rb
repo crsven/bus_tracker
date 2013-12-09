@@ -12,11 +12,12 @@ buses << html.css('.predictionNumberForOtherPreds .right').first.content
 buses << html.css('.predictionNumberForOtherPreds .right').last.content
 buses.map! {|b| b.gsub(/\n| /,'') }
 prediction = buses.join(', ')
+subject = "Next buses in #{prediction} minutes"
 
 message = {
   key: ENV['MANDRILL_APIKEY'],
   message: {
-    subject: "#{prediction}",
+    subject: subject,
     from_email: 'noreply@example.com',
     from_name: 'Your friendly neighborhood bus tracker',
     to: [
@@ -31,4 +32,3 @@ message = {
 
 send_endpoint = 'https://mandrillapp.com/api/1.0/messages/send.json'
 result = Typhoeus.post(send_endpoint, body: message)
-puts result
