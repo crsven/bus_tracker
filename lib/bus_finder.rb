@@ -2,15 +2,15 @@ require 'active_support/time'
 
 class BusFinder
   BUS_URL = 'http://www.nextbus.com/predictor/fancyNewPredictionLayer.jsp?a=lametro&r=720&s=16704'
-  FINDER_START_HOUR = 9
-  FINDER_START_MIN = 47
-  FINDER_END_HOUR = 10
-  FINDER_END_MIN = 00
 
   attr_reader :buses
 
   def initialize
     @buses = []
+    @finder_start_hour = ENV['BUS_FINDER_START_HOUR'].to_i
+    @finder_start_min = ENV['BUS_FINDER_START_MIN'].to_i
+    @finder_stop_hour = ENV['BUS_FINDER_STOP_HOUR'].to_i
+    @finder_stop_min = ENV['BUS_FINDER_STOP_MIN'].to_i
   end
 
   def find_buses!
@@ -28,8 +28,8 @@ class BusFinder
 
   def within_finding_time
     time = Time.current.getlocal('-08:00')
-    return false unless (time.hour == FINDER_START_HOUR && time.min >= FINDER_START_MIN) ||
-      (time.hour == FINDER_END_HOUR && time.min <= FINDER_END_MIN)
+    return false unless (time.hour == @finder_start_hour && time.min >= @finder_start_min) ||
+      (time.hour == @finder_stop_hour && time.min <= @finder_stop_min)
     true
   end
 end
