@@ -2,10 +2,10 @@ require 'active_support/time'
 
 class BusFinder
   BUS_URL = 'http://www.nextbus.com/predictor/fancyNewPredictionLayer.jsp?a=lametro&r=720&s=16704'
-  FINDER_START_HOUR = 8
-  FINDER_START_MIN = 50
-  FINDER_END_HOUR = 9
-  FINDER_END_MIN = 15
+  FINDER_START_HOUR = 9
+  FINDER_START_MIN = 47
+  FINDER_END_HOUR = 10
+  FINDER_END_MIN = 00
 
   attr_reader :buses
 
