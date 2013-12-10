@@ -28,8 +28,8 @@ class BusFinder
 
   def within_finding_time
     time = Time.current.getlocal('-08:00')
-    return false unless (time.hour == FINDER_START_HOUR && time.min >= FINDER_START_MIN)
-      || (time.hour == FINDER_END_HOUR && time.min <= FINDER_END_MIN)
+    return false unless (time.hour == FINDER_START_HOUR && time.min >= FINDER_START_MIN) ||
+      (time.hour == FINDER_END_HOUR && time.min <= FINDER_END_MIN)
     true
   end
 end
