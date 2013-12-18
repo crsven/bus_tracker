@@ -18,20 +18,13 @@ class BusFinder
 
     response = Typhoeus.get(BUS_URL)
     @html = Nokogiri::HTML(response.body)
-    @buses << first_bus_time if first_bus_to_sm?
-    @buses << second_bus_time if second_bus_to_sm?
-    @buses << third_bus_time if third_bus_to_sm?
+    check_bus(first_bus)
+    check_bus(second_bus)
+    check_bus(third_bus)
     @buses.map! {|b| b.gsub(/\n| /,'') }
   end
 
   private
-
-  def within_finding_time
-    time = Time.current.getlocal('-08:00')
-    return false unless (time.hour == @finder_start_hour && time.min >= @finder_start_min) ||
-      (time.hour == @finder_stop_hour && time.min <= @finder_stop_min)
-    true
-  end
 
   def first_bus
     {
@@ -54,30 +47,24 @@ class BusFinder
     }
   end
 
-  def first_bus_time
-    return 'Arriving' unless first_bus[:time_selector]
-    first_bus[:time_selector].content
+  def within_finding_time
+    time = Time.current.getlocal('-08:00')
+    return false unless (time.hour == @finder_start_hour && time.min >= @finder_start_min) ||
+      (time.hour == @finder_stop_hour && time.min <= @finder_stop_min)
+    true
   end
 
-  def first_bus_to_sm?
-    first_bus[:destination_text].include? 'Santa Monica'
+  def check_bus(bus)
+    @buses << bus_time(bus) if bus_to_sm?(bus)
   end
 
-  def second_bus_time
-    return 'Arriving' unless second_bus[:time_selector]
-    second_bus[:time_selector].content
+  def bus_time(bus)
+    return 'Arriving' unless bus[:time_selector]
+    bus[:time_selector].content
   end
 
-  def second_bus_to_sm?
-    second_bus[:destination_text].include? 'Santa Monica'
-  end
-
-  def third_bus_time
-    return 'Arriving' unless third_bus[:time_selector]
-    third_bus[:time_selector].content
-  end
-
-  def third_bus_to_sm?
-    third_bus[:destination_text].include? 'Santa Monica'
+  def bus_to_sm?(bus)
+    puts bus[:destination_text]
+    bus[:destination_text].include? 'Santa Monica'
   end
 end
