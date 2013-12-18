@@ -33,42 +33,51 @@ class BusFinder
     true
   end
 
-  def first_bus_selector
-    @html.css('.predictionNumberForFirstPred .right').first
+  def first_bus
+    {
+      time_selector: @html.css('.predictionNumberForFirstPred .right').first,
+      destination_text: @html.css('.directionNameForPred').first.content,
+    }
   end
 
-  def second_bus_selector
-    @html.css('.predictionNumberForOtherPreds .right').first
+  def second_bus
+    {
+      time_selector: @html.css('.predictionNumberForOtherPreds .right').first,
+      destination_text: @html.css('.directionNameForPred')[1].content,
+    }
   end
 
-  def third_bus_selector
-    @html.css('.predictionNumberForOtherPreds .right').last
+  def third_bus
+    {
+      time_selector: @html.css('.predictionNumberForOtherPreds .right').last,
+      destination_text: @html.css('.directionNameForPred').last.content,
+    }
   end
 
   def first_bus_time
-    return 'Arriving' unless first_bus_selector
-    first_bus_selector.content
+    return 'Arriving' unless first_bus[:time_selector]
+    first_bus[:time_selector].content
   end
 
   def first_bus_to_sm?
-    @html.css('.directionNameForPred').first.content.include? 'Santa Monica'
+    first_bus[:destination_text].include? 'Santa Monica'
   end
 
   def second_bus_time
-    return 'Arriving' unless second_bus_selector
-    second_bus_selector.content
+    return 'Arriving' unless second_bus[:time_selector]
+    second_bus[:time_selector].content
   end
 
   def second_bus_to_sm?
-    @html.css('.directionNameForPred')[1].content.include? 'Santa Monica'
+    second_bus[:destination_text].include? 'Santa Monica'
   end
 
   def third_bus_time
-    return 'Arriving' unless third_bus_selector
-    third_bus_selector.content
+    return 'Arriving' unless third_bus[:time_selector]
+    third_bus[:time_selector].content
   end
 
   def third_bus_to_sm?
-    @html.css('.directionNameForPred').last.content.include? 'Santa Monica'
+    third_bus[:destination_text].include? 'Santa Monica'
   end
 end
