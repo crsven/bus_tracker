@@ -11,9 +11,18 @@ class BusFinder
     @finder_start_min = ENV['BUS_FINDER_START_MIN'].to_i
     @finder_stop_hour = ENV['BUS_FINDER_STOP_HOUR'].to_i
     @finder_stop_min = ENV['BUS_FINDER_STOP_MIN'].to_i
+    @mail_service = MailService.new
   end
 
-  def find_buses!
+  def run
+    while true do
+      find_buses
+      mail_service.send_buses(buses) unless buses.empty?
+      sleep 60.0
+    end
+  end
+
+  def find_buses
     return unless within_finding_time
 
     response = Typhoeus.get(BUS_URL)
