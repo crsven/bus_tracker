@@ -17,7 +17,7 @@ class BusFinder
   def run
     while true do
       find_buses
-      mail_service.send_buses(buses) unless buses.empty?
+      @mail_service.send_buses(buses) unless buses.empty?
       sleep 60.0
     end
   end
@@ -64,16 +64,17 @@ class BusFinder
   end
 
   def check_bus(bus)
-    @buses << bus_time(bus) if bus_to_sm?(bus)
+    time_string = bus_time(bus)
+    time = time_string.scan(/\d+/).first.to_i
+    @buses << time_string if bus_to_sm?(bus) && time.to_i > 7
   end
 
   def bus_time(bus)
-    return 'Arriving' unless bus[:time_selector]
+    return "0" unless bus[:time_selector]
     bus[:time_selector].content
   end
 
   def bus_to_sm?(bus)
-    puts bus[:destination_text]
     bus[:destination_text].include? 'Santa Monica'
   end
 end
