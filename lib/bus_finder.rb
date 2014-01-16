@@ -31,9 +31,14 @@ class BusFinder
 
     response = Typhoeus.get(BUS_URL)
     @html = Nokogiri::HTML(response.body)
-    check_bus(first_bus)
-    check_bus(second_bus)
-    check_bus(third_bus)
+    begin
+      check_bus(first_bus)
+      check_bus(second_bus)
+      check_bus(third_bus)
+    rescue NoMethodError => e
+      puts e
+      puts @html.css('.directionNameForPred')
+    end
     @buses.map! {|b| b.gsub(/\n| /,'') }
   end
 
