@@ -75,7 +75,12 @@ class BusFinder
   def check_bus(bus)
     time_string = bus_time(bus)
     time = time_string.scan(/\d+/).first.to_i
+    log_bus(bus)
     @buses << time_string if bus_to_sm?(bus) && time.to_i > 7
+  end
+
+  def log_bus(bus)
+    puts "#{bus[:time_selector]} #{bus[:destination_text]}"
   end
 
   def bus_time(bus)
