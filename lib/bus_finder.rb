@@ -17,11 +17,15 @@ class BusFinder
   def run
     while true do
       find_buses
-      @mail_service.send_buses(buses) unless buses.empty?
+      handle_buses unless buses.empty?
       sleep 60.0
     end
   end
 
+  def handle_buses
+    @mail_service.send_buses(buses)
+    buses.clear
+  end
   def find_buses
     return unless within_finding_time
 
