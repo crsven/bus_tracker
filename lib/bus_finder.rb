@@ -67,6 +67,8 @@ class BusFinder
 
   def within_finding_time
     time = Time.current.getlocal('-08:00')
+    date = Date.current
+    return false unless [1..5].include?(date.wday)
     return false unless (time.hour == @finder_start_hour && time.min >= @finder_start_min) ||
       (time.hour == @finder_stop_hour && time.min <= @finder_stop_min)
     true
