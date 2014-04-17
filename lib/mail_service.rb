@@ -1,20 +1,9 @@
-class MailService
-  SEND_ENDPOINT = 'https://mandrillapp.com/api/1.0/messages/send.json'
-
-  def send_buses(predictions)
-    times = predictions.join(', ')
-    subject = "Next buses in #{times} minutes"
-    new_message = message(subject)
-    send_message new_message
+class MailService < BaseService
+  def initialize
+    @send_endpoint = 'https://mandrillapp.com/api/1.0/messages/send.json'
   end
 
-  private
-
-  def send_message(message)
-    Typhoeus.post(SEND_ENDPOINT, body: message)
-  end
-
-  def message(subject)
+  def build_packet(subject)
     {
       key: ENV['MANDRILL_APIKEY'],
       message: {

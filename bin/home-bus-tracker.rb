@@ -3,6 +3,7 @@
 require 'typhoeus'
 require 'nokogiri'
 require_relative '../lib/bus_finder'
+require_relative '../lib/base_service'
 require_relative '../lib/mail_service'
 require_relative '../lib/pushover_service'
 
