@@ -5,13 +5,17 @@ class BusFinder
 
   attr_reader :buses
 
-  def initialize
+  def initialize(use_mail_fallback=false)
     @buses = []
     @finder_start_hour = ENV['BUS_FINDER_START_HOUR'].to_i
     @finder_start_min = ENV['BUS_FINDER_START_MIN'].to_i
     @finder_stop_hour = ENV['BUS_FINDER_STOP_HOUR'].to_i
     @finder_stop_min = ENV['BUS_FINDER_STOP_MIN'].to_i
-    @mail_service = MailService.new
+    @notification_service = if use_mail_fallback
+                              MailService.new
+                            else
+                              PushoverService.new
+                            end
   end
 
   def run
@@ -23,9 +27,10 @@ class BusFinder
   end
 
   def handle_buses
-    @mail_service.send_buses(buses)
+    @notification_service.send_buses(buses)
     buses.clear
   end
+
   def find_buses
     return unless within_finding_time
 
